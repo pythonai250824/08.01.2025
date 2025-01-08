@@ -1,16 +1,18 @@
-# This is a sample Python script.
+import sqlitelib
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+db_name: str = "sales.db"
+conn, cursor = sqlitelib.connect_db(db_name)
 
+product_name = input('enter new product name?')
+product_price = float(input('enter new product name?'))
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+sqlitelib.update_query(
+    cursor, conn,
+    "INSERT INTO products (name, price) VALUES (?, ?)",
+    (product_name, product_price))
 
+result_select_products = sqlitelib.read_query(cursor, "SELECT * from products")
+for item in result_select_products:
+    print(item)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+conn.close()
